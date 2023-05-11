@@ -1,0 +1,75 @@
+/*
+  Damla SOYDAN - 032190059
+  İrem İÇÖZ - 032190009
+*/
+using System;
+public class Node {
+    public Sefer Sefer { get; set; }
+    public Node Sol { get; set; }
+    public Node Sag { get; set; }
+}
+
+public class KonteynerAgaci {
+    public Node Kok;
+    public KonteynerAgaci(){
+        Kok=null;
+    }
+
+    public void Ekle(Sefer sefer) {
+        if (Kok == null) {
+            Kok = new Node { Sefer = sefer };
+        }
+        else {
+            Node current = Kok;
+            while (true) {
+                if (sefer.GidisTarihi < current.Sefer.GidisTarihi) {
+                    if (current.Sol == null) {
+                        current.Sol = new Node { Sefer = sefer };//sefer=sefer kısmı seferin içindeki seferi alıyor
+                        break;
+                    }
+                    else {
+                        current = current.Sol;
+                    }
+                }
+                else {
+                    if (current.Sag == null) {
+                        current.Sag = new Node { Sefer = sefer };
+                        break;
+                    }
+                    else {
+                        current = current.Sag;
+                    }
+                }
+            }
+        }
+    }
+    public void print(Node kok) {
+        if (kok == null) {
+            return;
+        }
+        print(kok.Sol);
+        Console.WriteLine(kok.Sefer.GidisTarihi);
+        print(kok.Sag);
+    }
+
+    public void print() {
+        print(Kok);
+    }
+    
+}
+
+
+class Program {
+    static void Main(string[] args) {
+        KonteynerAgaci agac = new KonteynerAgaci();
+        Sefer sefer1 = new Sefer("İstanbul", new Anmekan("İzmir", new DateTime(2024, 1, 1,1,1,1)), new DateTime(2024, 8, 1,15,30,01));
+        Sefer sefer2 = new Sefer("Ankara", new Anmekan("Antalya", new DateTime(2023, 2, 1)), new DateTime(2024, 3, 1));
+        Sefer sefer3 = new Sefer("İzmir", new Anmekan("Adana", new DateTime(2021, 3, 1)), new DateTime(2025, 3, 1));
+
+        // Seferlerin ağaca eklenmesi
+        agac.Ekle(sefer1);
+        agac.Ekle(sefer2);
+        agac.Ekle(sefer3);
+        agac.print();
+    }
+}
